@@ -11,5 +11,4 @@ public class UserAchievement : BaseEntity
     public string AchievementName { get; set; }
     public string AchievementDescription { get; set; }
     public int ValueToAchieve { get; set; }
-
 }

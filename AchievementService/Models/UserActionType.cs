@@ -12,6 +12,6 @@ public enum UserActionType
     AddItemToFolder = 1007,
     AutofillUsed = 1008,
     GeneratorUsed = 1009,
-    AddURIToItem = 10010,
+    AddUriToItem = 10010,
     AddAttachmentToItem = 10011
 }

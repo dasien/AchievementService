@@ -2,79 +2,75 @@ USE [master]
 GO
 /****** Object:  Database [Achievement]    Script Date: 10/17/2024 4:28:26 PM ******/
 CREATE DATABASE [Achievement]
- CONTAINMENT = NONE
- ON  PRIMARY 
-( NAME = N'Achievement', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\Achievement.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
- LOG ON 
-( NAME = N'Achievement_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\Achievement_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
- WITH CATALOG_COLLATION = DATABASE_DEFAULT
+    CONTAINMENT = NONE
+WITH CATALOG_COLLATION = DATABASE_DEFAULT
 GO
 ALTER DATABASE [Achievement] SET COMPATIBILITY_LEVEL = 150
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
-begin
-EXEC [Achievement].[dbo].[sp_fulltext_database] @action = 'enable'
-end
+    begin
+        EXEC [Achievement].[dbo].[sp_fulltext_database] @action = 'enable'
+    end
 GO
-ALTER DATABASE [Achievement] SET ANSI_NULL_DEFAULT OFF 
+ALTER DATABASE [Achievement] SET ANSI_NULL_DEFAULT OFF
 GO
-ALTER DATABASE [Achievement] SET ANSI_NULLS OFF 
+ALTER DATABASE [Achievement] SET ANSI_NULLS OFF
 GO
-ALTER DATABASE [Achievement] SET ANSI_PADDING OFF 
+ALTER DATABASE [Achievement] SET ANSI_PADDING OFF
 GO
-ALTER DATABASE [Achievement] SET ANSI_WARNINGS OFF 
+ALTER DATABASE [Achievement] SET ANSI_WARNINGS OFF
 GO
-ALTER DATABASE [Achievement] SET ARITHABORT OFF 
+ALTER DATABASE [Achievement] SET ARITHABORT OFF
 GO
-ALTER DATABASE [Achievement] SET AUTO_CLOSE OFF 
+ALTER DATABASE [Achievement] SET AUTO_CLOSE OFF
 GO
-ALTER DATABASE [Achievement] SET AUTO_SHRINK OFF 
+ALTER DATABASE [Achievement] SET AUTO_SHRINK OFF
 GO
-ALTER DATABASE [Achievement] SET AUTO_UPDATE_STATISTICS ON 
+ALTER DATABASE [Achievement] SET AUTO_UPDATE_STATISTICS ON
 GO
-ALTER DATABASE [Achievement] SET CURSOR_CLOSE_ON_COMMIT OFF 
+ALTER DATABASE [Achievement] SET CURSOR_CLOSE_ON_COMMIT OFF
 GO
-ALTER DATABASE [Achievement] SET CURSOR_DEFAULT  GLOBAL 
+ALTER DATABASE [Achievement] SET CURSOR_DEFAULT GLOBAL
 GO
-ALTER DATABASE [Achievement] SET CONCAT_NULL_YIELDS_NULL OFF 
+ALTER DATABASE [Achievement] SET CONCAT_NULL_YIELDS_NULL OFF
 GO
-ALTER DATABASE [Achievement] SET NUMERIC_ROUNDABORT OFF 
+ALTER DATABASE [Achievement] SET NUMERIC_ROUNDABORT OFF
 GO
-ALTER DATABASE [Achievement] SET QUOTED_IDENTIFIER OFF 
+ALTER DATABASE [Achievement] SET QUOTED_IDENTIFIER OFF
 GO
-ALTER DATABASE [Achievement] SET RECURSIVE_TRIGGERS OFF 
+ALTER DATABASE [Achievement] SET RECURSIVE_TRIGGERS OFF
 GO
-ALTER DATABASE [Achievement] SET  DISABLE_BROKER 
+ALTER DATABASE [Achievement] SET DISABLE_BROKER
 GO
-ALTER DATABASE [Achievement] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+ALTER DATABASE [Achievement] SET AUTO_UPDATE_STATISTICS_ASYNC OFF
 GO
-ALTER DATABASE [Achievement] SET DATE_CORRELATION_OPTIMIZATION OFF 
+ALTER DATABASE [Achievement] SET DATE_CORRELATION_OPTIMIZATION OFF
 GO
-ALTER DATABASE [Achievement] SET TRUSTWORTHY OFF 
+ALTER DATABASE [Achievement] SET TRUSTWORTHY OFF
 GO
-ALTER DATABASE [Achievement] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+ALTER DATABASE [Achievement] SET ALLOW_SNAPSHOT_ISOLATION OFF
 GO
-ALTER DATABASE [Achievement] SET PARAMETERIZATION SIMPLE 
+ALTER DATABASE [Achievement] SET PARAMETERIZATION SIMPLE
 GO
-ALTER DATABASE [Achievement] SET READ_COMMITTED_SNAPSHOT OFF 
+ALTER DATABASE [Achievement] SET READ_COMMITTED_SNAPSHOT OFF
 GO
-ALTER DATABASE [Achievement] SET HONOR_BROKER_PRIORITY OFF 
+ALTER DATABASE [Achievement] SET HONOR_BROKER_PRIORITY OFF
 GO
-ALTER DATABASE [Achievement] SET RECOVERY FULL 
+ALTER DATABASE [Achievement] SET RECOVERY FULL
 GO
-ALTER DATABASE [Achievement] SET  MULTI_USER 
+ALTER DATABASE [Achievement] SET MULTI_USER
 GO
-ALTER DATABASE [Achievement] SET PAGE_VERIFY CHECKSUM  
+ALTER DATABASE [Achievement] SET PAGE_VERIFY CHECKSUM
 GO
-ALTER DATABASE [Achievement] SET DB_CHAINING OFF 
+ALTER DATABASE [Achievement] SET DB_CHAINING OFF
 GO
-ALTER DATABASE [Achievement] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+ALTER DATABASE [Achievement] SET FILESTREAM ( NON_TRANSACTED_ACCESS = OFF )
 GO
-ALTER DATABASE [Achievement] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+ALTER DATABASE [Achievement] SET TARGET_RECOVERY_TIME = 60 SECONDS
 GO
-ALTER DATABASE [Achievement] SET DELAYED_DURABILITY = DISABLED 
+ALTER DATABASE [Achievement] SET DELAYED_DURABILITY = DISABLED
 GO
-ALTER DATABASE [Achievement] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+ALTER DATABASE [Achievement] SET ACCELERATED_DATABASE_RECOVERY = OFF
 GO
 EXEC sys.sp_db_vardecimal_storage_format N'Achievement', N'ON'
 GO
@@ -82,319 +78,77 @@ ALTER DATABASE [Achievement] SET QUERY_STORE = OFF
 GO
 USE [Achievement]
 GO
-/****** Object:  Table [dbo].[UserAchievement]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[UserAchievement](
-	[UserId] [int] NOT NULL,
-	[AchievementId] [int] NOT NULL,
-	[CurrentValue] [int] NULL,
-	[AchievementDate] [datetime] NULL,
- CONSTRAINT [OrgUserAchievement_pk] PRIMARY KEY CLUSTERED 
+create table AchievementValidatorType
 (
-	[UserId] ASC,
-	[AchievementId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Achievement]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Achievement](
-	[AchievementId] [int] IDENTITY(1000,1) NOT NULL,
-	[AchievementName] [nvarchar](255) NOT NULL,
-	[AchievementDescription] [nvarchar](2000) NOT NULL,
-	[ValueToAchieve] [int] NOT NULL,
-	[ValidatorTypeId] [int] NOT NULL,
-	[IconName] [nvarchar](255) NULL,
- CONSTRAINT [Achievement_pk] PRIMARY KEY CLUSTERED 
+    Id          int identity (1000, 1)
+        constraint PK_AchievementValidatorType
+            primary key,
+    Name        nvarchar(255)  not null,
+    Description nvarchar(2000) not null
+)
+go
+
+create table Achievement
 (
-	[AchievementId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  View [dbo].[UserAchievementView]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+    AchievementId          int identity (1000, 1)
+        constraint Achievement_pk
+            primary key,
+    AchievementName        nvarchar(255)  not null,
+    AchievementDescription nvarchar(2000) not null,
+    ValueToAchieve         int,
+    LowRangeValue          int,
+    HighRangeValue         int,
+    SingleValue            int,
+    ValidatorTypeId        int            not null
+        constraint FK_AchievementValidatorType
+            references AchievementValidatorType,
+    IconName               nvarchar(255)
+)
+go
+
+create table [User]
+(
+    UserId   int identity (1000, 1)
+        constraint OrgUser_pk
+            primary key,
+    UserName nvarchar(255) not null
+)
+go
+
+create table UserAchievement
+(
+    UserId          int not null
+        constraint FKOrgUser
+            references [User],
+    AchievementId   int not null
+        constraint FKAchievement
+            references Achievement,
+    CurrentValue    int,
+    AchievementDate datetime,
+    constraint OrgUserAchievement_pk
+        primary key (UserId, AchievementId)
+)
+go
+
+create table UserActionToAchievement
+(
+    UserActionId  int not null,
+    AchievementId int not null
+        constraint AchievementIdFK
+            references Achievement,
+    constraint PK_UserActionToAchievement
+        primary key (UserActionId, AchievementId)
+)
+go
+
 CREATE VIEW [dbo].[UserAchievementView]
 AS
 SELECT   ua.UserId, a.AchievementId, ua.CurrentValue, ua.AchievementDate, a.AchievementName, a.AchievementDescription, a.ValueToAchieve
 FROM     dbo.UserAchievement AS ua INNER JOIN
-             dbo.Achievement AS a ON a.AchievementId = ua.AchievementId
-GO
-/****** Object:  Table [dbo].[AchievementValidatorType]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[AchievementValidatorType](
-	[Id] [int] IDENTITY(1000,1) NOT NULL,
-	[Name] [nvarchar](255) NOT NULL,
-	[Description] [nvarchar](2000) NOT NULL,
- CONSTRAINT [PK_AchievementValidatorType] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[User]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[User](
-	[UserId] [int] IDENTITY(1000,1) NOT NULL,
-	[UserName] [nvarchar](255) NOT NULL,
- CONSTRAINT [OrgUser_pk] PRIMARY KEY CLUSTERED 
-(
-	[UserId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[UserActionToAchievement]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[UserActionToAchievement](
-	[UserActionId] [int] NOT NULL,
-	[AchievementId] [int] NOT NULL,
- CONSTRAINT [PK_UserActionToAchievement] PRIMARY KEY CLUSTERED 
-(
-	[UserActionId] ASC,
-	[AchievementId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[Achievement]  WITH CHECK ADD  CONSTRAINT [FK_AchievementValidatorType] FOREIGN KEY([ValidatorTypeId])
-REFERENCES [dbo].[AchievementValidatorType] ([Id])
-GO
-ALTER TABLE [dbo].[Achievement] CHECK CONSTRAINT [FK_AchievementValidatorType]
-GO
-ALTER TABLE [dbo].[UserAchievement]  WITH CHECK ADD  CONSTRAINT [FKAchievement] FOREIGN KEY([AchievementId])
-REFERENCES [dbo].[Achievement] ([AchievementId])
-GO
-ALTER TABLE [dbo].[UserAchievement] CHECK CONSTRAINT [FKAchievement]
-GO
-ALTER TABLE [dbo].[UserAchievement]  WITH CHECK ADD  CONSTRAINT [FKOrgUser] FOREIGN KEY([UserId])
-REFERENCES [dbo].[User] ([UserId])
-GO
-ALTER TABLE [dbo].[UserAchievement] CHECK CONSTRAINT [FKOrgUser]
-GO
-ALTER TABLE [dbo].[UserActionToAchievement]  WITH CHECK ADD  CONSTRAINT [AchievementIdFK] FOREIGN KEY([AchievementId])
-REFERENCES [dbo].[Achievement] ([AchievementId])
-GO
-ALTER TABLE [dbo].[UserActionToAchievement] CHECK CONSTRAINT [AchievementIdFK]
-GO
-/****** Object:  StoredProcedure [dbo].[DeleteAchievement]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+         dbo.Achievement AS a ON a.AchievementId = ua.AchievementId
+go
 
-CREATE PROCEDURE [dbo].[DeleteAchievement]
-	@Id int	
-	AS
-
-DELETE FROM [dbo].[Achievement]
- WHERE 
-		[AchievementId] = @Id 
-GO
-/****** Object:  StoredProcedure [dbo].[DeleteAllAchievementsForUser]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[DeleteAllAchievementsForUser]
-	@OrgUserId int	
-	AS
-
-DELETE FROM [dbo].[OrgUserAchievement]
- WHERE 
-		[OrgUserId] = @OrgUserId 
-GO
-/****** Object:  StoredProcedure [dbo].[DeleteUserAchievement]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[DeleteUserAchievement]
-	@UserId int,
-	@AchievementId int
-
-	AS
-
-DELETE FROM [dbo].[UserAchievement]
- WHERE 
-		[UserId] = @UserId AND [AchievementId] = @AchievementId
-GO
-/****** Object:  StoredProcedure [dbo].[GetAchievementsByUserId]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
--- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE PROCEDURE [dbo].[GetAchievementsByUserId] 
-	-- Add the parameters for the stored procedure here
-	@UserId int 
-AS
-BEGIN
-	SET NOCOUNT ON;
-	
-	SELECT UserId
-      ,AchievementId
-      ,CurrentValue
-      ,AchievementDate
-	  ,AchievementName
-	  ,AchievementDescription
-	  ,ValueToAchieve
-  FROM UserAchievementView
-
-	WHERE UserId = @UserId
-END
-GO
-/****** Object:  StoredProcedure [dbo].[GetAchievementsForUserAction]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[GetAchievementsForUserAction]
-	@UserAction	int
-
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-    -- Insert statements for procedure here
-	SELECT a.AchievementId
-      ,[AchievementName]
-      ,[AchievementDescription]
-      ,[ValueToAchieve]
-      ,[ValidatorTypeId]
-      ,[IconName]
-  FROM Achievement a
-  
-  JOIN UserActionToAchievement ua
-
-  on a.AchievementId = ua.AchievementId
-  WHERE ua.UserActionId = @UserAction
-END
-GO
-/****** Object:  StoredProcedure [dbo].[InsertAchievement]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[InsertAchievement]
-           @Name nvarchar(255),
-           @Description nvarchar(2000),
-           @ValueToAchieve int,
-		   @ValidatorType int,
-           @Icon nvarchar(255)
-AS
-
-INSERT INTO [dbo].[Achievement]
-           ([AchievementName]
-           ,[AchievementDescription]
-           ,[ValueToAchieve]
-		   ,[ValidatorTypeId]
-           ,[IconName])
-     VALUES
-           (@Name,
-           @Description,
-           @ValueToAchieve,
-		   @ValidatorType,
-           @Icon)
-GO
-/****** Object:  StoredProcedure [dbo].[InsertUserAchievement]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[InsertUserAchievement]
-           @UserId int,
-           @AchievementId int,
-           @CurrentValue int,
-           @AchievementDate datetime
-AS
-
-INSERT INTO [dbo].[UserAchievement]
-           ([UserId]
-           ,[AchievementId]
-           ,[CurrentValue]
-           ,[AchievementDate])
-     VALUES
-           (@UserId,
-           @AchievementId,
-           @CurrentValue,
-           @AchievementDate)
-GO
-/****** Object:  StoredProcedure [dbo].[UpdateAchievement]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[UpdateAchievement]
-           @Id int,
-		   @Name nvarchar(255),
-           @Description nvarchar(2000),
-           @ValueToAchieve int,
-           @ValidatorType int,
-		   @Icon nvarchar(255)
-AS
-
-UPDATE [dbo].[Achievement]
-
-SET
-           [AchievementName] = @Name,
-           [AchievementDescription] = @Description,
-           [ValueToAchieve] = @ValueToAchieve,
-		   [ValidatorTypeId] = @ValidatorType,
-           [IconName] = @Icon
-
-WHERE AchievementId = @Id
-GO
-/****** Object:  StoredProcedure [dbo].[UpdateUserAchievement]    Script Date: 10/17/2024 4:28:26 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[UpdateUserAchievement]
-	@UserId int,
-	@AchievementId int,
-	@CurrentValue int,
-	@AchievementDate datetime
-
-	AS
-
-UPDATE [dbo].[UserAchievement]
-   SET 
-      [CurrentValue] = @CurrentValue,
-      [AchievementDate] = @AchievementDate
- WHERE 
-		[UserId] = @UserId AND [AchievementId] = @AchievementId
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPane1', @value=N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+exec sp_addextendedproperty 'MS_DiagramPane1', N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
 Begin DesignProperties = 
    Begin PaneConfigurations = 
       Begin PaneConfiguration = 0
@@ -511,11 +265,159 @@ Begin DesignProperties =
       End
    End
 End
-' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'UserAchievementView'
-GO
-EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'UserAchievementView'
-GO
-USE [master]
-GO
-ALTER DATABASE [Achievement] SET  READ_WRITE 
-GO
+', 'SCHEMA', 'dbo', 'VIEW', 'UserAchievementView'
+go
+
+exec sp_addextendedproperty 'MS_DiagramPaneCount', 1, 'SCHEMA', 'dbo', 'VIEW', 'UserAchievementView'
+go
+
+
+CREATE PROCEDURE [dbo].[DeleteAchievement]
+@Id int
+AS
+
+DELETE FROM [dbo].[Achievement]
+WHERE
+    [AchievementId] = @Id
+go
+
+
+CREATE PROCEDURE [dbo].[DeleteAllAchievementsForUser]
+@UserId int
+AS
+
+DELETE FROM [dbo].[UserAchievement]
+WHERE
+    [UserId] = @UserId
+go
+
+
+CREATE PROCEDURE [dbo].[DeleteUserAchievement]
+    @UserId int,
+    @AchievementId int
+
+AS
+
+DELETE FROM [dbo].[UserAchievement]
+WHERE
+    [UserId] = @UserId AND [AchievementId] = @AchievementId
+go
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[GetAchievementsByUserId]
+    -- Add the parameters for the stored procedure here
+@UserId int
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT UserId
+         ,AchievementId
+         ,CurrentValue
+         ,AchievementDate
+         ,AchievementName
+         ,AchievementDescription
+         ,ValueToAchieve
+    FROM UserAchievementView
+
+    WHERE UserId = @UserId
+END
+go
+
+
+CREATE PROCEDURE [dbo].[GetAchievementsForUserAction]
+@UserAction	int
+
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+    SELECT a.AchievementId
+         ,[AchievementName]
+         ,[AchievementDescription]
+         ,[ValueToAchieve]
+         ,[LowRangeValue]
+         ,[HighRangeValue]
+         ,[SingleValue]
+         ,[ValidatorTypeId]
+         ,[IconName]
+    FROM Achievement a
+
+             JOIN UserActionToAchievement ua
+
+                  on a.AchievementId = ua.AchievementId
+    WHERE ua.UserActionId = @UserAction
+END
+go
+
+
+
+CREATE PROCEDURE [dbo].[InsertUserAchievement]
+    @UserId int,
+    @AchievementId int,
+    @CurrentValue int,
+    @AchievementDate datetime
+AS
+
+INSERT INTO [dbo].[UserAchievement]
+([UserId]
+,[AchievementId]
+,[CurrentValue]
+,[AchievementDate])
+VALUES
+    (@UserId,
+     @AchievementId,
+     @CurrentValue,
+     @AchievementDate)
+go
+
+
+CREATE PROCEDURE [dbo].[UpdateAchievement]
+    @Id int,
+    @Name nvarchar(255),
+    @Description nvarchar(2000),
+    @ValueToAchieve int,
+    @LowRangeValue int,
+    @HighRangeValue int,
+    @ValidatorType int,
+    @Icon nvarchar(255)
+AS
+
+UPDATE [dbo].[Achievement]
+
+SET
+    [AchievementName] = @Name,
+    [AchievementDescription] = @Description,
+    [ValueToAchieve] = @ValueToAchieve,
+    [LowRangeValue] = @LowRangeValue,
+    [HighRangeValue] = @HighRangeValue,
+    [ValidatorTypeId] = @ValidatorType,
+    [IconName] = @Icon
+
+WHERE AchievementId = @Id
+go
+
+
+
+CREATE PROCEDURE [dbo].[UpdateUserAchievement]
+    @UserId int,
+    @AchievementId int,
+    @CurrentValue int,
+    @AchievementDate datetime
+
+AS
+
+UPDATE [dbo].[UserAchievement]
+SET
+    [CurrentValue] = @CurrentValue,
+    [AchievementDate] = @AchievementDate
+WHERE
+    [UserId] = @UserId AND [AchievementId] = @AchievementId
+go
+

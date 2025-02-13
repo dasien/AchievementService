@@ -15,7 +15,10 @@ public class AchievementMap : IEntityMap
         achievement.Name = rdr.GetString(1);
         achievement.Description = rdr.GetString(2);
         achievement.ValueToAchieve = rdr.IsDBNull(3) ? 0 : rdr.GetInt32(3);
-        achievement.ValidatorType = rdr.GetInt32(4);
-        achievement.Icon = rdr.IsDBNull(5) ? "" : rdr.GetString(5);
+        achievement.LowRangeValue = rdr.IsDBNull(4) ? 0 : rdr.GetInt32(4);
+        achievement.HighRangeValue = rdr.IsDBNull(5) ? 0 : rdr.GetInt32(5);
+        achievement.SingleValue = rdr.IsDBNull(6) ? 0 : rdr.GetInt32(6);
+        achievement.ValidatorType = rdr.GetInt32(7);
+        achievement.Icon = rdr.IsDBNull(8) ? "" : rdr.GetString(8);
     }
 }

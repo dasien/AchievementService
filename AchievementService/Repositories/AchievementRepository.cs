@@ -12,14 +12,14 @@ public class AchievementRepository
         return GetAchievementsForUserAction(con, null, 30, userActionType);
     }
     
-    public IEnumerable<IEntity> GetAchievementsForUserAction(IDbConnection con, IDbTransaction txn, int timeout, UserActionType userActionType)
+    public IEnumerable<IEntity> GetAchievementsForUserAction(IDbConnection con, IDbTransaction? txn, int timeout, UserActionType userActionType)
     {
         List<Achievement> retVal = new List<Achievement>();
 
-        using (IDbCommand cmd = DBCommandUtils.CreateCommand(con, "GetAchievementsForUserAction", CommandType.StoredProcedure, txn, timeout))
+        using (IDbCommand cmd = SqlCommandUtils.CreateCommand(con, "GetAchievementsForUserAction", CommandType.StoredProcedure, txn, timeout))
         {
             // Set parameters.
-            DBCommandUtils.AddInputParam(cmd, "@UserAction", userActionType, DbType.Int32);
+            SqlCommandUtils.AddInputParam(cmd, "@UserAction", userActionType, DbType.Int32);
             
             using (IDataReader reader = cmd.ExecuteReader())
             {
@@ -35,36 +35,39 @@ public class AchievementRepository
         return retVal;
     }
 
-    public IEntity GetById(IDbConnection con, IDbTransaction txn, int timeout, int Id)
+    public IEntity GetById(IDbConnection con, IDbTransaction? txn, int timeout, int id)
     {
         throw new NotImplementedException();
     }
 
-        public IEntity Insert(IDbConnection con, IEntity entity)
+    public IEntity Insert(IDbConnection con, IEntity entity)
     {
         return Insert(con, null, 30, entity);
     }
 
-    public IEntity Insert(IDbConnection con, IDbTransaction txn, int timeout, IEntity entity)
+    public IEntity Insert(IDbConnection con, IDbTransaction? txn, int timeout, IEntity entity)
     {
-        Achievement achievement = entity as Achievement;
+        Achievement? achievement = entity as Achievement;
 
-        // Get new command object.
-        using (IDbCommand cmd = DBCommandUtils.CreateCommand(con, "InsertAchievement", CommandType.StoredProcedure, txn, timeout))
+        if (achievement == null)
         {
-            // Set parameters.
-            DBCommandUtils.AddInputParam(cmd, "@Name", achievement.Name, DbType.String);
-            DBCommandUtils.AddInputParam(cmd, "@Description", achievement.Description, DbType.String);
-            DBCommandUtils.AddInputParam(cmd, "@ValueToAchieve", achievement.ValueToAchieve, DbType.Int32);
-            DBCommandUtils.AddInputParam(cmd, "@ValidatorType", achievement.ValidatorType, DbType.Int32);
-            DBCommandUtils.AddInputParam(cmd, "@Icon", achievement.Icon, DbType.String);
+            // Get new command object.
+            using (IDbCommand cmd =
+                   SqlCommandUtils.CreateCommand(con, "InsertAchievement", CommandType.StoredProcedure, txn, timeout))
+            {
+                // Set parameters.
+                SqlCommandUtils.AddInputParam(cmd, "@Name", achievement.Name, DbType.String);
+                SqlCommandUtils.AddInputParam(cmd, "@Description", achievement.Description, DbType.String);
+                SqlCommandUtils.AddInputParam(cmd, "@ValueToAchieve", achievement.ValueToAchieve, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@ValidatorType", achievement.ValidatorType, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@Icon", achievement.Icon, DbType.String);
 
-            // Execute query.
-            int id = Convert.ToInt32(cmd.ExecuteScalar());
+                // Execute query.
+                int id = Convert.ToInt32(cmd.ExecuteScalar());
 
-            // Update entity with new id.
-            achievement.Id = id;
-
+                // Update entity with new id.
+                achievement.Id = id;
+            }
         }
 
         return achievement;
@@ -75,21 +78,21 @@ public class AchievementRepository
         Update(con, null, 30, entity);
     }
 
-    public void Update(IDbConnection con, IDbTransaction txn, int timeout, IEntity entity)
+    public void Update(IDbConnection con, IDbTransaction? txn, int timeout, IEntity entity)
     {
         // Get new command object.
         using (IDbCommand cmd =
-               DBCommandUtils.CreateCommand(con, "UpdateAchievement", CommandType.StoredProcedure, txn, timeout))
+               SqlCommandUtils.CreateCommand(con, "UpdateAchievement", CommandType.StoredProcedure, txn, timeout))
         {
             Achievement achievement = entity as Achievement;
 
             // Set parameters.
-            DBCommandUtils.AddInputParam(cmd, "@Id", achievement.Id, DbType.Int32);
-            DBCommandUtils.AddInputParam(cmd, "@Name", achievement.Name, DbType.String);
-            DBCommandUtils.AddInputParam(cmd, "@Description", achievement.Description, DbType.String);
-            DBCommandUtils.AddInputParam(cmd, "@ValueToAchieve", achievement.ValueToAchieve, DbType.Int32);
-            DBCommandUtils.AddInputParam(cmd, "@ValidatorType", achievement.ValidatorType, DbType.Int32);
-            DBCommandUtils.AddInputParam(cmd, "@Icon", achievement.Icon, DbType.String);
+            SqlCommandUtils.AddInputParam(cmd, "@Id", achievement.Id, DbType.Int32);
+            SqlCommandUtils.AddInputParam(cmd, "@Name", achievement.Name, DbType.String);
+            SqlCommandUtils.AddInputParam(cmd, "@Description", achievement.Description, DbType.String);
+            SqlCommandUtils.AddInputParam(cmd, "@ValueToAchieve", achievement.ValueToAchieve, DbType.Int32);
+            SqlCommandUtils.AddInputParam(cmd, "@ValidatorType", achievement.ValidatorType, DbType.Int32);
+            SqlCommandUtils.AddInputParam(cmd, "@Icon", achievement.Icon, DbType.String);
 
             // Execute query.
             cmd.ExecuteNonQuery();
@@ -101,14 +104,14 @@ public class AchievementRepository
         Delete(con, null, 30, entity);
     }
 
-    public void Delete(IDbConnection con, IDbTransaction txn, int timeout, IEntity entity)
+    public void Delete(IDbConnection con, IDbTransaction? txn, int timeout, IEntity entity)
     {
         // Get new command object.
         using (IDbCommand cmd =
-               DBCommandUtils.CreateCommand(con, "DeleteAchievement", CommandType.StoredProcedure, txn, timeout))
+               SqlCommandUtils.CreateCommand(con, "DeleteAchievement", CommandType.StoredProcedure, txn, timeout))
         {
             // Set parameters.
-            DBCommandUtils.AddInputParam(cmd, "@Id", entity.Id, DbType.Int32);
+            SqlCommandUtils.AddInputParam(cmd, "@Id", entity.Id, DbType.Int32);
 
             // Execute query.
             cmd.ExecuteNonQuery();

@@ -1,5 +1,5 @@
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using AchievementService.Models;
 using AchievementService.Repositories;
 using AchievementService.Validators;
@@ -42,7 +42,26 @@ namespace AchievementService.Services
 
          // Return the list of Albums.
          return retVal;
+      }
 
+      public void ResetAllUserAchievements(int userId)
+      {
+         UserAchievementRepository repository = new UserAchievementRepository();
+
+         try
+         {
+            // Use connection context.
+            using (IDbConnection con = new SqlConnection(_dsn))
+            {
+               con.Open();
+               repository.DeleteAll(con, userId);
+            }
+         }
+
+         catch (Exception ex)
+         {
+            throw new Exception("Unable to reset user achievements.", ex);
+         }
       }
 
       public List<Achievement> CheckForAchievement(UserAction action)
