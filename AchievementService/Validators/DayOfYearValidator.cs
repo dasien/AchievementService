@@ -5,16 +5,14 @@ using AchievementService.Repositories;
 
 namespace AchievementService.Validators;
 
-public class DayOfYearValidator : IAchievementValidator
+public class DayOfYearValidator : AchievementValidator
 {
-    private string _dsn;
-    
-    public DayOfYearValidator(string dsn)
+    public DayOfYearValidator(string dsn) : base(dsn)
     {
-        _dsn = dsn;
+        
     }
 
-    public bool Validate(Achievement achievement, UserAchievement? userAchievement, UserAction userAction)
+    public override bool Validate(Achievement achievement, UserAchievement? userAchievement, UserAction userAction)
     {
         // Temp flag to indicate if the user met achievement.
         bool achievementMet = false;
@@ -28,26 +26,8 @@ public class DayOfYearValidator : IAchievementValidator
             {
                 achievementMet = true;
                 
-                // Create new achievement for this user.
-                userAchievement = new UserAchievement
-                {
-                    // Save values.
-                    CurrentValue = 1,
-                    AchievementDate = DateTime.Now,
-                    UserId = userAction.UserId,
-                    AchievementId = achievement.Id
-                };
-
-                // Insert new achievement for user.
-                UserAchievementRepository repository = new UserAchievementRepository();
-                
-                // Use connection context.
-                using (IDbConnection con = new SqlConnection(_dsn))
-                {
-                    con.Open();
-
-                    repository.Insert(con, userAchievement);
-                }
+                // Create new achievement.
+                CreateUserAchievement(1, DateTime.Now, userAction.UserId, achievement.Id);
             }
         }
         

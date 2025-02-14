@@ -21,7 +21,7 @@ namespace AchievementService.Services
          UserAchievementRepository repository = new UserAchievementRepository();
          
          // List of achievements for this user.
-         List<UserAchievement> retVal = null;
+         List<UserAchievement>? retVal = null;
 
          try
          {
@@ -98,16 +98,20 @@ namespace AchievementService.Services
                   UserAchievement? orgUserAchievement = userAchievements.Find(x => x.AchievementId == achievement.Id);
                   
                   // Create the appropriate validator.
-                  IAchievementValidator validator =
+                  AchievementValidator? validator =
                      AchievementValidatorFactory.CreateAchievementValidator(achievement.ValidatorType, _dsn);
                   
-                  // Check for achievement progress.
-                  bool result = validator.Validate(achievement, orgUserAchievement, action);
-                  
-                  // Add achievement to return list if it was met.
-                  if (result)
+                  // Check to see if we got a validator.
+                  if (validator != null)
                   {
-                     retVal.Add(achievement);
+                     // Check for achievement progress.
+                     bool result = validator.Validate(achievement, orgUserAchievement, action);
+
+                     // Add achievement to return list if it was met.
+                     if (result)
+                     {
+                        retVal.Add(achievement);
+                     }
                   }
                }
             }

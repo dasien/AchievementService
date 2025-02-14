@@ -49,7 +49,7 @@ public class AchievementRepository
     {
         Achievement? achievement = entity as Achievement;
 
-        if (achievement == null)
+        if (achievement != null)
         {
             // Get new command object.
             using (IDbCommand cmd =
@@ -84,18 +84,21 @@ public class AchievementRepository
         using (IDbCommand cmd =
                SqlCommandUtils.CreateCommand(con, "UpdateAchievement", CommandType.StoredProcedure, txn, timeout))
         {
-            Achievement achievement = entity as Achievement;
+            Achievement? achievement = entity as Achievement;
 
-            // Set parameters.
-            SqlCommandUtils.AddInputParam(cmd, "@Id", achievement.Id, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@Name", achievement.Name, DbType.String);
-            SqlCommandUtils.AddInputParam(cmd, "@Description", achievement.Description, DbType.String);
-            SqlCommandUtils.AddInputParam(cmd, "@ValueToAchieve", achievement.ValueToAchieve, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@ValidatorType", achievement.ValidatorType, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@Icon", achievement.Icon, DbType.String);
+            if (achievement != null)
+            {
+                // Set parameters.
+                SqlCommandUtils.AddInputParam(cmd, "@Id", achievement.Id, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@Name", achievement.Name, DbType.String);
+                SqlCommandUtils.AddInputParam(cmd, "@Description", achievement.Description, DbType.String);
+                SqlCommandUtils.AddInputParam(cmd, "@ValueToAchieve", achievement.ValueToAchieve, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@ValidatorType", achievement.ValidatorType, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@Icon", achievement.Icon, DbType.String);
 
-            // Execute query.
-            cmd.ExecuteNonQuery();
+                // Execute query.
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 

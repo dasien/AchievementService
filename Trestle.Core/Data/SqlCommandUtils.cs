@@ -101,7 +101,7 @@ namespace Trestle.Core.Data
 			return cmd;
 		}
 
-        public static IDbCommand CreateCommand(IDbConnection cn, string commandText, CommandType commandType, IDbTransaction txn, int timeout)
+        public static IDbCommand CreateCommand(IDbConnection cn, string commandText, CommandType commandType, IDbTransaction? txn, int timeout)
         {
             IDbCommand cmd = cn.CreateCommand();
 

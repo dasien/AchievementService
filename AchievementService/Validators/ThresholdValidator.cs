@@ -5,16 +5,14 @@ using AchievementService.Repositories;
 
 namespace AchievementService.Validators;
 
-public class ThresholdValidator : IAchievementValidator
+public class ThresholdValidator : AchievementValidator
 {
-    private string _dsn;
-    
-    public ThresholdValidator(string dsn)
+    public ThresholdValidator(string dsn) : base(dsn)
     {
-        _dsn = dsn;
+        
     }
     
-    public bool Validate(Achievement achievement, UserAchievement? userAchievement, UserAction userAction)
+    public override bool Validate(Achievement achievement, UserAchievement? userAchievement, UserAction userAction)
     {
         // Temp flag to indicate if the user met achievement.
         bool achievementMet = false;
@@ -36,16 +34,8 @@ public class ThresholdValidator : IAchievementValidator
                 userAchievement.CurrentValue++;
                 userAchievement.AchievementDate = DateTime.Now;
                 
-                // Save it.
-                UserAchievementRepository repository = new UserAchievementRepository();
-                
-                // Use connection context.
-                using (IDbConnection con = new SqlConnection(_dsn))
-                {
-                    con.Open();
-
-                    repository.Update(con, userAchievement);
-                }
+                // Update user achievement.
+                UpdateUserAchievement(userAchievement);
             }
         }
 
@@ -57,27 +47,9 @@ public class ThresholdValidator : IAchievementValidator
                 // Flag that achievement is met.
                 achievementMet = true;
             }
-            
-            // Create new achievement for this user.
-            userAchievement = new UserAchievement
-            {
-                // Save values.
-                CurrentValue = 1,
-                AchievementDate = DateTime.Now,
-                UserId = userAction.UserId,
-                AchievementId = achievement.Id
-            };
 
-            // Insert new achievement for user.
-            UserAchievementRepository repository = new UserAchievementRepository();
-                
-            // Use connection context.
-            using (IDbConnection con = new SqlConnection(_dsn))
-            {
-                con.Open();
-
-                repository.Insert(con, userAchievement);
-            }
+            // Create new achievement.
+            CreateUserAchievement(1, DateTime.Now, userAction.UserId, achievement.Id);
         }
         
         // Return flag to indicate achievement reached.

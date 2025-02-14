@@ -12,7 +12,7 @@ public class UserAchievementRepository
         return GetByUserId(con, null, 30, userId);
     }
 
-    public IEnumerable<IEntity> GetByUserId(IDbConnection con, IDbTransaction txn, int timeout, int userId)
+    public IEnumerable<IEntity> GetByUserId(IDbConnection con, IDbTransaction? txn, int timeout, int userId)
     {
         List<UserAchievement> retVal = new List<UserAchievement>();
 
@@ -40,21 +40,26 @@ public class UserAchievementRepository
         return Insert(con, null, 30, entity);
     }
 
-    public IEntity Insert(IDbConnection con, IDbTransaction txn, int timeout, IEntity entity)
+    public IEntity Insert(IDbConnection con, IDbTransaction? txn, int timeout, IEntity entity)
     {
-        UserAchievement userAchievement = entity as UserAchievement;
+        UserAchievement? userAchievement = entity as UserAchievement;
 
-        // Get new command object.
-        using (IDbCommand cmd = SqlCommandUtils.CreateCommand(con, "InsertUserAchievement", CommandType.StoredProcedure, txn, timeout))
+        if (userAchievement != null)
         {
-            // Set parameters.
-            SqlCommandUtils.AddInputParam(cmd, "@UserId", userAchievement.UserId, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@AchievementId", userAchievement.AchievementId, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@CurrentValue", userAchievement.CurrentValue, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@AchievementDate", userAchievement.AchievementDate, DbType.DateTime);
-            
-            // Execute query.
-            cmd.ExecuteNonQuery();
+            // Get new command object.
+            using (IDbCommand cmd = SqlCommandUtils.CreateCommand(con, "InsertUserAchievement",
+                       CommandType.StoredProcedure, txn, timeout))
+            {
+                // Set parameters.
+                SqlCommandUtils.AddInputParam(cmd, "@UserId", userAchievement.UserId, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@AchievementId", userAchievement.AchievementId, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@CurrentValue", userAchievement.CurrentValue, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@AchievementDate", userAchievement.AchievementDate,
+                    DbType.DateTime);
+
+                // Execute query.
+                cmd.ExecuteNonQuery();
+            }
         }
 
         return userAchievement;
@@ -65,22 +70,26 @@ public class UserAchievementRepository
         Update(con, null, 30, entity);
     }
 
-    public void Update(IDbConnection con, IDbTransaction txn, int timeout, IEntity entity)
+    public void Update(IDbConnection con, IDbTransaction? txn, int timeout, IEntity entity)
     {
         // Get new command object.
         using (IDbCommand cmd =
                SqlCommandUtils.CreateCommand(con, "UpdateUserAchievement", CommandType.StoredProcedure, txn, timeout))
         {
-            UserAchievement userAchievement = entity as UserAchievement;
+            UserAchievement? userAchievement = entity as UserAchievement;
 
-            // Set parameters.
-            SqlCommandUtils.AddInputParam(cmd, "@UserId", userAchievement.UserId, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@AchievementId", userAchievement.AchievementId, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@CurrentValue", userAchievement.CurrentValue, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@AchievementDate", userAchievement.AchievementDate, DbType.DateTime);
+            if (userAchievement != null)
+            {
+                // Set parameters.
+                SqlCommandUtils.AddInputParam(cmd, "@UserId", userAchievement.UserId, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@AchievementId", userAchievement.AchievementId, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@CurrentValue", userAchievement.CurrentValue, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@AchievementDate", userAchievement.AchievementDate,
+                    DbType.DateTime);
 
-            // Execute query.
-            cmd.ExecuteNonQuery();
+                // Execute query.
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 
@@ -89,19 +98,22 @@ public class UserAchievementRepository
         Delete(con, null, 30, entity);
     }
 
-    public void Delete(IDbConnection con, IDbTransaction txn, int timeout, IEntity entity)
+    public void Delete(IDbConnection con, IDbTransaction? txn, int timeout, IEntity entity)
     {
         // Get new command object.
         using (IDbCommand cmd = SqlCommandUtils.CreateCommand(con, "DeleteUserAchievement", CommandType.StoredProcedure, txn, timeout))
         {
-            UserAchievement userAchievement = entity as UserAchievement;
-            
-            // Set parameters.
-            SqlCommandUtils.AddInputParam(cmd, "@UserId", userAchievement.UserId, DbType.Int32);
-            SqlCommandUtils.AddInputParam(cmd, "@AchievementId", userAchievement.AchievementId, DbType.Int32);
+            UserAchievement? userAchievement = entity as UserAchievement;
 
-            // Execute query.
-            cmd.ExecuteNonQuery();
+            if (userAchievement != null)
+            {
+                // Set parameters.
+                SqlCommandUtils.AddInputParam(cmd, "@UserId", userAchievement.UserId, DbType.Int32);
+                SqlCommandUtils.AddInputParam(cmd, "@AchievementId", userAchievement.AchievementId, DbType.Int32);
+
+                // Execute query.
+                cmd.ExecuteNonQuery();
+            }
         }
     }
     
@@ -109,7 +121,7 @@ public class UserAchievementRepository
     {
         DeleteAll(con, null, 30, userId);
     }
-    public void DeleteAll(IDbConnection con, IDbTransaction txn, int timeout, int userId)
+    public void DeleteAll(IDbConnection con, IDbTransaction? txn, int timeout, int userId)
     {
         // Get new command object.
         using (IDbCommand cmd = SqlCommandUtils.CreateCommand(con, "DeleteAllAchievementsForUser", CommandType.StoredProcedure, txn, timeout))

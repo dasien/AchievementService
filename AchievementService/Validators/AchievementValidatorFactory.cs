@@ -2,7 +2,7 @@ namespace AchievementService.Validators;
 
 public static class AchievementValidatorFactory
 {
-    public static IAchievementValidator? CreateAchievementValidator(int validatorType, string dsn)
+    public static AchievementValidator? CreateAchievementValidator(int validatorType, string dsn)
     {
         // Based on the validator type, return a specific validator.
         switch (validatorType)
