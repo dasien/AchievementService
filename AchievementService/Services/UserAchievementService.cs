@@ -21,7 +21,7 @@ namespace AchievementService.Services
          UserAchievementRepository repository = new UserAchievementRepository();
          
          // List of achievements for this user.
-         List<UserAchievement>? retVal = null;
+         List<UserAchievement>? retVal;
 
          try
          {
@@ -40,7 +40,7 @@ namespace AchievementService.Services
             throw new Exception("Unable to get user achievements.", ex);
          }
 
-         // Return the list of Albums.
+         // Return the list of Achievements.
          return retVal;
       }
 
@@ -74,10 +74,7 @@ namespace AchievementService.Services
          
          try
          {
-            List<Achievement>? achievements = null;
-            
-            // Get achievements for this user.
-            List<UserAchievement> userAchievements = GetUserAchievements(action.UserId);
+            List<Achievement>? achievements;
             
             // Get the achievements for this action.
             using (IDbConnection con = new SqlConnection(_dsn))
@@ -91,6 +88,9 @@ namespace AchievementService.Services
             // Check to see if there are any achievements for this action.
             if (achievements != null)
             {
+               // Get achievements for this user.
+               List<UserAchievement> userAchievements = GetUserAchievements(action.UserId);
+
                // Loop through the possible achievements.
                foreach (Achievement achievement in achievements)
                {

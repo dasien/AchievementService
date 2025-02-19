@@ -7,7 +7,7 @@ namespace AchievementService.Validators
 {
     public abstract class AchievementValidator
     {
-        private string _dsn;
+        private readonly string _dsn;
 
         protected AchievementValidator(string dsn)
         {
